@@ -63,3 +63,24 @@
   2. **視窗寬度比對守衛（Width-Guard on Resize）**：
      在 resize 事件中比對 `window.innerWidth === lastWindowWidth`，若僅高度改變（即網址列伸縮）則直接 return，徹底終止假性 resize 迴圈。
   3. **視窗高度常數化**：將 Hero 區塊的 `min-h-[100dvh]` 改為穩定無跳動的 `min-h-screen`，消除因 dvh 動態重算產生的微小抖動。
+
+## 10. 並行多通道備援導致重複提交 (Duplicate Form Submissions) 之病灶與單一活躍通道架構
+- **問題現象**：無論使用手機（Safari / Chrome）或電腦填寫送出出席回函一次，Google 表單與關聯的 Google 試算表後台每次都會精確收到「重複三份一模一樣的回覆」。
+- **深層病灶：備援通道「並行全發（Broadcast Race）」而非「容錯降級（Failover Fallback）」**：
+  在解決 Safari WebKit 相容性時，原先為了確保 100% 抵達，在提交函式內連續依序觸發了三個發送機制：
+  1. `await fetch(formAction, ...)`（通道一）
+  2. `navigator.sendBeacon(formAction, ...)`（通道二）
+  3. `form.submit()`（通道三）
+  在先前欄位 Enum 未完全匹配時，通道一或二可能因錯誤被攔截；然而當我們將 Google 表單的 12 組欄位與 Enum 徹底校準完畢、後台回復 HTTP 200 OK 後，這三個通道在現代瀏覽器中「全部同時執行成功」！因此，一次按鈕點擊實際上向 Google 表單伺服器同時發射了 3 個獨立的 POST 請求，造成 Google 試算表產生精確的 3 筆重複紀錄。
+  此外，若 HTML 表單之 `onsubmit="return handleFormSubmit(event)"` 綁定的是 `async` 函式，其回傳值為 Promise 物件（在 JS 中屬於 Truthy 數值），若無嚴謹的同步攔截或回傳基本型態 `false`，可能在特定瀏覽器下再度伴隨原生表單提交。
+- **老屋翻修隱喻**：
+  這就像老屋翻修時擔心停電，同時拉了「市電」、「發電機」與「太陽能儲能」三套電力線路，結果配電箱沒有安裝「自動切換開關（ATS / Automatic Transfer Switch）」，而是把三套電源線直接擰在一起通電，導致電器一次承受三重電流灌入！
+- **根治方案**：
+  1. **單一活躍通道與優雅降級（Primary Channel with Failover Fallback）**：
+     - 將廣播式觸發改為嚴格的「主從容錯機制」：優先採用現代標準 `fetch(mode: 'no-cors')` 作為唯一主通道。
+     - 僅在 `fetch` 遇到不支援或拋出例外時，才接續嘗試 `navigator.sendBeacon`；若皆不支援才降級至不可見 iframe 的 `form.submit()`。正常情況下永遠只有一條線路通訊。
+  2. **送出互斥鎖（Submission Mutex / Debounce Guard）**：
+     - 宣告 `isSubmitting` 狀態旗標與按鈕 `disabled = true`，在表單發送期間嚴格拒絕任何重複觸發（如雙擊或 Enter 鍵）。
+  3. **表單原生事件嚴格攔截**：
+     - 將表單宣告改為 `onsubmit="handleFormSubmit(event); return false;"`，並於函式入口第一行同步執行 `e.preventDefault()`，杜絕任何 Promise Truthy 導致的瀏覽器默認重複提交。
+

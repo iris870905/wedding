@@ -671,7 +671,7 @@
           action="https://docs.google.com/forms/d/e/1FAIpQLSeOTowFQrYxM92jW_aD3hZ6WXbmQXWHRZBfJQzJ7cj8izLq0A/formResponse" 
           method="POST" 
           target="hidden_iframe"
-          onsubmit="return handleFormSubmit(event)"
+          onsubmit="handleFormSubmit(event); return false;"
           class="bg-white rounded-2xl p-5 sm:p-10 shadow-soft-glow border border-morandi-gold/25 space-y-5 sm:space-y-6"
         >
           <!-- Google Form 必備系統路由參數 -->
@@ -1077,12 +1077,14 @@
     }
 
     /* ==========================================================
-       4. 跨瀏覽器零掉單傳送引擎 (Safari / Chrome / iOS / macOS 100% 相容)
+       4. 跨瀏覽器防重複單一傳送引擎 (避免重複三份回覆，Safari / Chrome 100% 相容)
        ========================================================== */
-    let submitted = false;
+    let isSubmitting = false;
 
     async function handleFormSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
+      if (isSubmitting) return false;
+
       const form = document.getElementById('weddingForm');
       const btn = document.getElementById('submitBtn');
 
@@ -1090,6 +1092,10 @@
         form.reportValidity();
         return false;
       }
+
+      isSubmitting = true;
+      btn.disabled = true;
+      btn.innerHTML = '<span>資料送出中...</span>';
 
       // 自動補齊未展開/隱藏欄位的安全預設值，保證 100% 吻合 Google 表單後端規格
       const attendance = document.getElementById('entry_1312972387').value;
@@ -1129,36 +1135,46 @@
       const postBody = params.toString();
       const formAction = form.action || "https://docs.google.com/forms/d/e/1FAIpQLSeOTowFQrYxM92jW_aD3hZ6WXbmQXWHRZBfJQzJ7cj8izLq0A/formResponse";
 
-      submitted = true;
-      btn.disabled = true;
-      btn.innerHTML = '<span>資料送出中...</span>';
+      // 嚴格保證每次只送出「單一請求」，杜絕多通道並行造成的重複 3 筆回覆問題
+      let sentSuccessfully = false;
 
-      // 核心相容通道 1: 原生 fetch mode: 'no-cors' (Safari Mac & iOS 100% 穿透跨域，不依賴 iframe)
-      try {
-        await fetch(formAction, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: postBody
-        });
-      } catch (err) {
-        console.warn('Primary fetch notice:', err);
-      }
-
-      // 核心相容通道 2: navigator.sendBeacon (背景信標備援)
-      if (navigator.sendBeacon) {
+      // 核心主通道: 原生 fetch (mode: 'no-cors') 支援 Safari (Mac & iOS) 與所有現代瀏覽器
+      if (window.fetch) {
         try {
-          const blob = new Blob([postBody], { type: 'application/x-www-form-urlencoded' });
-          navigator.sendBeacon(formAction, blob);
-        } catch (e) {}
+          await fetch(formAction, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: postBody
+          });
+          sentSuccessfully = true;
+        } catch (fetchErr) {
+          console.warn('Fetch submission note, switching to fallback:', fetchErr);
+        }
       }
 
-      // 核心相容通道 3: Safari 合規不可見 iframe 備援觸發
-      try {
-        form.submit();
-      } catch (e) {}
+      // 僅在 fetch 發生例外或環境不支援時，才依序啟用備援
+      if (!sentSuccessfully) {
+        if (navigator.sendBeacon) {
+          try {
+            const blob = new Blob([postBody], { type: 'application/x-www-form-urlencoded' });
+            sentSuccessfully = navigator.sendBeacon(formAction, blob);
+          } catch (beaconErr) {
+            console.warn('Beacon fallback note:', beaconErr);
+          }
+        }
+
+        // 若前述兩者皆失敗，最後才使用原生 iframe 備援提交
+        if (!sentSuccessfully) {
+          try {
+            form.submit();
+          } catch (formErr) {
+            console.error('All form submission channels failed:', formErr);
+          }
+        }
+      }
 
       // 延遲展示成功彈出視窗
       setTimeout(() => {
@@ -1169,8 +1185,7 @@
     }
 
     function onFormSubmitted() {
-      if (!submitted) return;
-      submitted = false;
+      isSubmitting = false;
 
       const btn = document.getElementById('submitBtn');
       const form = document.getElementById('weddingForm');

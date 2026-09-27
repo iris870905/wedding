@@ -56,3 +56,15 @@
 - [x] 3. **`window.resize` 監聽器加入寬度比對守衛 (`window.innerWidth !== lastWindowWidth`)** <!-- id: 403 -->
 - [x] 4. **Hero 封面高度改為穩定 `min-h-screen`，杜絕動態高度微抖動** <!-- id: 404 -->
 - [x] 5. **成果提交 Git 並同步更新 GitHub Pages** <!-- id: 405 -->
+
+---
+
+## Phase 5: 表單重複三份回覆 Bug 根治 (Single Active Channel & Anti-Duplicate) (Completed)
+- [x] 1. **深層病灶定位：多備援通道同時執行 (Broadcast Race) 與 `onsubmit` Promise Truthy 陷阱** <!-- id: 501 -->
+- [x] 2. **重構 `handleFormSubmit`：實作單一活躍通道 (Primary-Failover Pattern)** <!-- id: 502 -->
+  - [x] 優先以原生 `fetch(mode: 'no-cors')` 單一請求發送
+  - [x] 僅在 fetch 異常或不支持時才依次降級至 `sendBeacon` 或 iframe
+- [x] 3. **表單提交互斥鎖與防抖 (`isSubmitting` Flag & `btn.disabled = true`)** <!-- id: 503 -->
+- [x] 4. **HTML onsubmit 嚴格布林攔截 (`onsubmit="handleFormSubmit(event); return false;"`)** <!-- id: 504 -->
+- [x] 5. **代碼驗證、Git Commit 與 GitHub Pages 自動發佈** <!-- id: 505 -->
+
