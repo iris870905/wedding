@@ -22,3 +22,18 @@
 
 ## 5. GitHub Pages 部署自動化與零破損相對路徑
 - **經驗總結**：所有靜態資源一律使用相對目錄（`photos/webX.jpg`），無論是本機 WEBrick 預覽伺服器、專案子路徑 (`https://<user>.github.io/wedding/`) 或是頂級主網域，都能 100% 免疫 404 破圖問題。透過 `gh repo create` 與 `gh api /repos/.../pages`，可實現一鍵代碼推送、自動開立 Pages 服務與即時發佈。
+
+## 6. 手機與電腦自適應智慧雙模式架構 (Adaptive Dual-Mode Architecture)
+- **老屋翻修隱喻**：原先版面如同專為寬闊豪宅客廳設計的「對開觀景落地窗與大長桌」（電腦寬螢幕），硬搬進精緻小坪數公寓（手機直向 9:16）時，空間動線必然堵塞（導覽列擠爆折行、雙頁書本被壓成兩張小郵票）。
+- **根治方案**：
+  1. **動態視窗判別（Dynamic Viewport Detection）**：結合 CSS Media Query 與 JS `window.innerWidth < 768`（`isMobileViewport()`），即時切換視圖狀態。
+  2. **相本雙模式無縫切換**：
+     - **手機端（<768px）**：自動切換為「單頁全幅雜誌視角（Single-Page Magazine Card）」，提供 `aspect-[3/4]` 滿版大圖、10 頁獨立篇章顯示（`01 / 10 張`）、直覺左右滑動觸控手勢（Touch Swipe）與單張縮圖焦點置中。
+     - **電腦端（≥768px）**：自動切換為「雙頁精裝書對開（Two-Page Spread Book）」，呈現 5 組對頁（`01 / 05 篇章`）、中脊陰影與絲帶書籤。
+     - **雙向即時映射**：旋轉螢幕或調整視窗大小時自動換算索引，體驗不中斷。
+  3. **導覽列抽屜（Mobile Navigation Drawer）**：在手機端將橫向選單收納進高雅毛玻璃下拉抽屜，右側保留輕量「出席回函」膠囊按鈕與漢堡選單，杜絕換行破版。
+  4. **倒數卡片與 3 位數彈性排版**：縮減手機內距並採用彈性字級，即便天數達 3 位數（如 160 天）亦保持視覺平衡不溢出。
+
+## 7. iOS Safari 表單 Auto-Zoom 防護
+- **問題現象**：在 iPhone iOS Safari 瀏覽器中，當表單輸入框的 `font-size` 小於 16px（例如 Tailwind `text-sm` 14px）時，點擊 input 會觸發系統強制整體頁面放大跳動，破壞排版視覺。
+- **根治方案**：在 `<style>` 中加入 `@media screen and (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }`，徹底杜絕畫面突發性放大問題。

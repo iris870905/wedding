@@ -1,26 +1,32 @@
-# 婚禮網站圖片路徑修正與架構優化任務 (Wedding Website Photo Link Correction & Architecture Refactor)
+# 婚禮網站開發與優化任務清單 (Wedding Website Tasks & Roadmap)
 
-- [x] 1. **診斷與架構分析 (Diagnosis & Analysis)** <!-- id: 0 -->
-  - [x] 檢視當前 `index.html` 狀態與檔案編碼損毀問題（TextEdit RTF/Cocoa HTML Writer 混入） <!-- id: 1 -->
-  - [x] 確認 `photos/` 目錄內 10 張婚紗相片（web1.jpg ~ web10.jpg）規格與尺寸 <!-- id: 2 -->
-  - [x] 檢查所有 HTML / JS 中的圖片連結引用點（相本、封面圖、縮圖） <!-- id: 3 -->
-- [x] 2. **修復與重構 HTML/JS (Correction & Implementation)** <!-- id: 4 -->
-  - [x] 將 Cocoa HTML Writer 包裝的偽 HTML 還原為純淨原生 HTML5 格式 <!-- id: 5 -->
-  - [x] 更新 `weddingPhotos` 配置陣列，由遠端 Google Drive 連結替換為本地相對路徑 `photos/web1.jpg` ~ `photos/web10.jpg` <!-- id: 6 -->
-  - [x] 實作被截斷的縮圖列建置邏輯 (`initThumbnails`) 與相本翻頁控制器 <!-- id: 7 -->
-  - [x] 修正相本在行動裝置與桌面端的雙頁排版及陰影細節 <!-- id: 8 -->
-  - [x] 補齊關閉標籤（`</script></body></html>`），確保 DOM 樹結構完整 <!-- id: 9 -->
-- [x] 3. **驗證與測試 (Verification & Testing)** <!-- id: 10 -->
-  - [x] 測試相本翻頁功能（上一頁、下一頁、自動輪播、縮圖點擊跳轉） <!-- id: 11 -->
-  - [x] 驗證所有 10 張本地照片皆能順暢載入且無破圖 <!-- id: 12 -->
-  - [x] 驗證表單互動、倒數計時器及 RWD 響應式排版正常運作 <!-- id: 13 -->
-- [x] 4. **總結與知識沉澱 (Summary & Lessons Learned)** <!-- id: 14 -->
-  - [x] 產出繁體中文技術交接文件與說明 <!-- id: 15 -->
-  - [x] 記錄經驗至 `tasks/lessons.md` <!-- id: 16 -->
-- [x] 5. **GitHub 環境構建與 Pages 自動部署 (GitHub Env & Pages Deployment)** <!-- id: 17 -->
-  - [x] 安裝獨立便攜式 Git (v2.55.0) 與動態函式庫 (pcre2, gettext) <!-- id: 18 -->
-  - [x] 安裝官方 GitHub CLI (gh v2.101.0) 並設定環境變數 PATH <!-- id: 19 -->
-  - [x] 完成 OAuth Device Web 授權登入（帳號：iris870905） <!-- id: 20 -->
-  - [x] 初始化本地 Git 儲存庫、配置 .gitignore 與建立初始 Commit <!-- id: 21 -->
-  - [x] 於 GitHub 建立公開儲存庫 `iris870905/wedding` 並完成推送 <!-- id: 22 -->
-  - [x] 啟用 GitHub Pages (main 分支根目錄)，驗證上線為 HTTP 200 <!-- id: 23 -->
+## Phase 1: 基礎架構與圖片路徑修復 (Completed)
+- [x] 1. 診斷與架構分析：修復 Cocoa HTML Writer 轉譯損毀問題 <!-- id: 101 -->
+- [x] 2. 婚紗相本本地化：10 張精選照片路徑指向 `photos/web1.jpg` ~ `web10.jpg` <!-- id: 102 -->
+- [x] 3. 實作相本翻頁控制器與縮圖列初始化邏輯 <!-- id: 103 -->
+- [x] 4. GitHub 便攜工具鏈部署與 GitHub Pages 正式上線 <!-- id: 104 -->
+
+---
+
+## Phase 2: 行動端自適應排版與手機瀏覽自動適配 (Completed)
+- [x] 1. **診斷與斷點分析 (Diagnosis & Responsive Strategy)** <!-- id: 201 -->
+  - [x] 分析手機窄螢幕 (360px ~ 430px) 與電腦寬螢幕 (≥768px) 排版衝突點
+  - [x] 確定 Mobile-First 與視窗監聽 (CSS Media Queries + JS `window.matchMedia` / `isMobileViewport`) 架構
+- [x] 2. **頂部導覽列行動化重構 (Mobile Navigation Overhaul)** <!-- id: 202 -->
+  - [x] 手機端防止文字擠壓折行，建構精緻優雅的毛玻璃行動導覽選單（含漢堡/關閉動畫與下拉遮罩）
+  - [x] 電腦端維持原精品毛玻璃橫向導覽條
+- [x] 3. **婚紗相本自適應雙模式重構 (Adaptive Gallery: Single vs Spread)** <!-- id: 203 -->
+  - [x] 手機端 (< 768px)：自動呈現「單頁全幅雜誌視角」（10 頁大圖，01/10 顯示，左右全螢幕沉浸滑動）
+  - [x] 電腦端 (≥ 768px)：保留經典「雙頁精裝書對開」（5 組對頁，01/05 篇章，書脊立體陰影與書籤）
+  - [x] JS 控制器支援視窗縮放/旋轉自動切換與頁碼映射，手勢滑動 100% 順暢支援（防誤觸縱向滾動）
+- [x] 4. **核心模組行動端視覺與互動體驗修復 (Module Refinements)** <!-- id: 204 -->
+  - [x] 幸福倒數：動態調整卡片內距與字級，解決 3 位數（如 160 天）在小手機溢出問題
+  - [x] 婚禮詳情 V-Card：最佳化手機邊距與流程圖示對齊，提供滿版導航點擊按鈕
+  - [x] 交通資訊摺疊盒：加大行動端觸控熱區 (Min 44px)
+  - [x] 出席回函表單：輸入框字級統一採用 16px (text-base) 根除 iOS Safari 自動放大跳動 bug
+- [x] 5. **全視窗驗證與多端測試 (Multi-Device Verification)** <!-- id: 205 -->
+  - [x] 使用本機 WEBrick 伺服器驗證所有 10 張本地照片皆能順暢載入且無破圖
+  - [x] 驗證相本翻頁、自動輪播、手勢滑動與表單填寫各環節
+- [x] 6. **成果交付、Git 儲存與經驗沉澱 (Delivery & Lessons Learned)** <!-- id: 206 -->
+  - [x] 提交代碼至 Git 並推送至 GitHub Pages 發佈
+  - [x] 於 `tasks/lessons.md` 記錄老屋翻修比喻與 RWD 裝置判別架構心得
