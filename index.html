@@ -217,8 +217,8 @@
     </div>
   </div>
 
-  <!-- Hero Section with Dynamic Viewport Height Background -->
-  <header id="hero" class="relative min-h-[100dvh] flex items-center justify-center pt-16 overflow-hidden">
+  <!-- Hero Section with Stable Viewport Height Background -->
+  <header id="hero" class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
     <!-- Background Image with Soft Gradient Overlay -->
     <div class="absolute inset-0 z-0">
       <img 
@@ -1458,11 +1458,13 @@
         }
       });
 
-      // 自動讓被選中的縮圖平滑滑動至可視區域中央
+      // 僅在縮圖橫向容器內部平滑滾動，確保選中縮圖置中，絕對不觸動 window 垂直捲動！
       const targetIndex = isSinglePhoto ? highlightKey : highlightKey * 2;
       const targetThumb = thumbs[targetIndex];
-      if (targetThumb && targetThumb.parentElement) {
-        targetThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      const strip = document.getElementById('thumbStrip');
+      if (strip && targetThumb) {
+        const scrollTarget = targetThumb.offsetLeft - (strip.clientWidth / 2) + (targetThumb.clientWidth / 2);
+        strip.scrollTo({ left: scrollTarget, behavior: 'smooth' });
       }
     }
 
@@ -1496,16 +1498,21 @@
       if (e.key === 'ArrowRight') nextSpread();
     });
 
-    // 視窗尺寸改變時自動重新適配 (Resize / OrientationChange)
+    // 視窗尺寸改變時自動重新適配 (僅當寬度真正改變時才執行，徹底過濾手機上下滾動時網址列收放引起的 height resize 假事件)
+    let lastWindowWidth = window.innerWidth;
     let resizeTimer = null;
     window.addEventListener('resize', () => {
+      if (window.innerWidth === lastWindowWidth) {
+        return; // 手機上下滾動導致網址列縮放，寬度未變，直接忽略！
+      }
+      lastWindowWidth = window.innerWidth;
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         renderAlbum();
         if (window.innerWidth >= 768) {
           closeMobileMenu();
         }
-      }, 100);
+      }, 150);
     });
 
     // 初始化相本與縮圖

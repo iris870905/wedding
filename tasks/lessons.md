@@ -50,3 +50,16 @@
      - **主通道（Primary）**：以現代標準 `fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() })` 直接傳送 URL-encoded 封包。`mode: 'no-cors'` 屬於標準 Simple Request，Safari（Mac / iOS）100% 允許跨域送出且完全不經 iframe，徹底免疫 WebKit ITP 攔截。
      - **背景信標通道（Secondary）**：同步輔以 `navigator.sendBeacon`，保障即使在手機切換 App 或關閉頁面瞬間仍可靠送達。
      - **iframe 渲染樹合規備援**：將備援 iframe 改為 `position: absolute; width: 1px; height: 1px; left: -9999px;`，使其真實存在於 DOM 渲染樹中，不被 WebKit 視為死節點而丟棄。
+
+## 9. 行動端 Scroll-Triggered Resize 與 scrollIntoView 視窗綁架迴圈
+- **問題現象**：在手機端向下滾動瀏覽網頁時，畫面會出現上下抖動、跳動，滑動至下方時甚至會自動瞬間被拉回網頁上方（相本區塊）。
+- **深層病灶 1：`scrollIntoView()` 的全域視窗綁架（Global Viewport Hijack）**：
+  `Element.prototype.scrollIntoView()` 並不只針對局部父容器滾動，而是會向上遍歷並捲動所有滾動祖先節點直到 `window`。在更新相本縮圖列焦點時呼叫了 `targetThumb.scrollIntoView()`，導致整個網頁被強制拉回位在頁面上方的相本區塊。
+- **深層病灶 2：行動端網址列收放觸發的 `window.resize` 死迴圈**：
+  在 iOS Safari 與 Android 行動瀏覽器中，當使用者向下滾動網頁時，系統網址列與底欄會縮小/隱藏以釋放視野。這會改變 `window.innerHeight`，進而觸發 `window.onresize` 事件！
+  如果 resize 監聽器未比對寬度，每次滾動都會觸發 `renderAlbum()` -> 觸發 `updateThumbnails()` -> 呼叫 `scrollIntoView()` 強制將畫面拉回頂端 -> 網址列重新彈出 -> 再次觸發 resize -> 造成死迴圈跳動！
+- **根治方案**：
+  1. **局部隔離橫向滾動**：完全移除全域 `scrollIntoView()`，改為 `strip.scrollTo({ left: scrollTarget, behavior: 'smooth' })`，僅針對 `#thumbStrip` 橫向微縮圖容器進行內部水平平移，100% 杜絕垂直視窗干擾。
+  2. **視窗寬度比對守衛（Width-Guard on Resize）**：
+     在 resize 事件中比對 `window.innerWidth === lastWindowWidth`，若僅高度改變（即網址列伸縮）則直接 return，徹底終止假性 resize 迴圈。
+  3. **視窗高度常數化**：將 Hero 區塊的 `min-h-[100dvh]` 改為穩定無跳動的 `min-h-screen`，消除因 dvh 動態重算產生的微小抖動。

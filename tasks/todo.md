@@ -47,3 +47,12 @@
   - [x] 實測「我要參加」路徑，回傳 HTTP 200 OK
   - [x] 實測「無法出席」路徑，回傳 HTTP 200 OK
   - [x] 推送最新代碼至 GitHub Pages 上線
+
+---
+
+## Phase 4: 行動端滾動跳動與自動回滾頂端 Bug 根治 (Completed)
+- [x] 1. **深層病灶定位：`scrollIntoView()` 全域視窗綁架與網址列收放死迴圈** <!-- id: 401 -->
+- [x] 2. **移除全域 `scrollIntoView()`，改為局部容器 `strip.scrollTo({ left: ... })`** <!-- id: 402 -->
+- [x] 3. **`window.resize` 監聽器加入寬度比對守衛 (`window.innerWidth !== lastWindowWidth`)** <!-- id: 403 -->
+- [x] 4. **Hero 封面高度改為穩定 `min-h-screen`，杜絕動態高度微抖動** <!-- id: 404 -->
+- [x] 5. **成果提交 Git 並同步更新 GitHub Pages** <!-- id: 405 -->
