@@ -68,3 +68,12 @@
 - [x] 4. **HTML onsubmit 嚴格布林攔截 (`onsubmit="handleFormSubmit(event); return false;"`)** <!-- id: 504 -->
 - [x] 5. **代碼驗證、Git Commit 與 GitHub Pages 自動發佈** <!-- id: 505 -->
 
+---
+
+## Phase 6: 「關於我們」主旨與文案專屬定制 (Our Next Chapter Content Update) (Completed)
+- [x] 1. **更新主旨標題**：`Our Next Chapter｜攜手啟程` <!-- id: 601 -->
+- [x] 2. **更新感言詩意文案**：加入蔡承桓與潘奕昕專屬故事與婚禮邀請詩文 <!-- id: 602 -->
+- [x] 3. **落款排版雙語化**：保留 `Andy & Iris` 英文花體並加入 `蔡承桓 • 潘奕昕` 典雅襯線字 <!-- id: 603 -->
+- [x] 4. **同步更新版本歷史文件 `history.md` 並推送 GitHub Pages** <!-- id: 604 -->
+
+
