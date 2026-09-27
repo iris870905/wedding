@@ -859,15 +859,17 @@
           <!-- Field 10: 想要紙本喜帖還是電子喜帖呢？ (entry.306280796 - 100% 匹配 Google 表單 Enum) -->
           <div>
             <label for="entry_306280796" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              想要紙本喜帖還是電子喜帖呢？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">INVITATION TYPE</span>
+              想要紙本喜帖還是電子喜帖呢？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">INVITATION TYPE</span> <span class="text-red-400">*</span>
             </label>
             <select 
               name="entry.306280796" 
               id="entry_306280796" 
+              required
               onchange="handleInvitationChange()"
               class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal cursor-pointer"
             >
-              <option value="電子喜帖" selected>電子喜帖（響應環保，以本婚禮網頁為主）</option>
+              <option value="" disabled selected>請選擇您想要的喜帖</option>
+              <option value="電子喜帖">電子喜帖（響應環保，以本婚禮網頁為主）</option>
               <option value="紙本喜帖">紙本喜帖（期待收到實體紀念）</option>
             </select>
           </div>
@@ -1063,18 +1065,28 @@
     }
 
     function handleInvitationChange() {
-      const inviteType = document.getElementById('entry_306280796') ? document.getElementById('entry_306280796').value : '電子喜帖';
+      const inviteSelect = document.getElementById('entry_306280796');
+      const inviteType = inviteSelect ? inviteSelect.value : '';
       const inviteContainer = document.getElementById('invitation-address-container');
       const addressInput = document.getElementById('entry_2093466386');
       
       if (inviteType === '紙本喜帖') {
         if (inviteContainer) inviteContainer.style.display = 'block';
-        if (addressInput) addressInput.required = true;
+        if (addressInput) {
+          addressInput.required = true;
+          if (addressInput.value === '無 / 選擇電子喜帖' || addressInput.value === '無 / 無法出席') {
+            addressInput.value = '';
+          }
+        }
       } else {
         if (inviteContainer) inviteContainer.style.display = 'none';
         if (addressInput) {
           addressInput.required = false;
-          addressInput.value = '無 / 選擇電子喜帖';
+          if (inviteType === '電子喜帖') {
+            addressInput.value = '無 / 選擇電子喜帖';
+          } else {
+            addressInput.value = '';
+          }
         }
       }
     }
@@ -1106,7 +1118,7 @@
       const childInput = document.getElementById('entry_1259066676');
       const childSeatsInput = document.getElementById('entry_1887387302');
       const vegInput = document.getElementById('entry_1945371672');
-      const inviteType = document.getElementById('entry_306280796') ? document.getElementById('entry_306280796').value : '電子喜帖';
+      const inviteType = document.getElementById('entry_306280796') ? document.getElementById('entry_306280796').value : '';
       const addressInput = document.getElementById('entry_2093466386');
 
       if (attendance === '好傷心我無法出席，獻上真誠的祝福') {
@@ -1115,7 +1127,7 @@
         if (childSeatsInput) childSeatsInput.value = '0';
         if (vegInput) vegInput.value = '0';
         if (addressInput && (!addressInput.value || addressInput.value.trim() === '')) {
-          addressInput.value = '無 / 無法出席';
+          addressInput.value = (inviteType === '電子喜帖') ? '無 / 選擇電子喜帖' : '無 / 無法出席';
         }
       } else {
         if (adultInput && (!adultInput.value || adultInput.value.trim() === '')) adultInput.value = '1';
