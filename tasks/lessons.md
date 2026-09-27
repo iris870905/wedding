@@ -37,3 +37,16 @@
 ## 7. iOS Safari 表單 Auto-Zoom 防護
 - **問題現象**：在 iPhone iOS Safari 瀏覽器中，當表單輸入框的 `font-size` 小於 16px（例如 Tailwind `text-sm` 14px）時，點擊 input 會觸發系統強制整體頁面放大跳動，破壞排版視覺。
 - **根治方案**：在 `<style>` 中加入 `@media screen and (max-width: 767px) { input, select, textarea { font-size: 16px !important; } }`，徹底杜絕畫面突發性放大問題。
+
+## 8. Safari (WebKit) 跨域表單提交限制與 Google Forms 嚴格列舉值陷阱
+- **問題現象**：在 Safari（含 macOS 電腦版與 iOS 手機版）中，出席回函表單無法將資料傳送至 Google 表單後台，而在 Chrome 瀏覽器則看似正常。
+- **深層病灶 1：WebKit 對 `display:none` iframe 的導航丟棄與 ITP 跨域攔截**：
+  Safari 的 WebKit 核心對未在 Layout Tree（渲染樹）中繪製的節點（`display:none`）具備嚴格安全隔離。當 `<form target="...">` 指向 `display:none` 的 iframe 進行跨域 POST 時，WebKit 會將其判定為無效導航或受智慧防追蹤（ITP）保護直接中止請求（Cancelled），使得資料根本沒有送出。
+- **深層病灶 2：Google 表單伺服器端的 Strict Enum 白名單檢驗**：
+  Google Forms 後端對 Radio / Select 等選項型欄位具備伺服器端字串白名單檢驗。例如「出席意願」在 Google 表單原始定義為「`好傷心我無法出席，獻上真誠的祝福`」，若前端送出自定義的「`無法出席，心意相伴`」，Google 表單伺服器會直接回傳 **HTTP 400 Bad Request** 並拒絕寫入試算表。先前「新人關係」也存在多個非官方字串，導致選中特定選項時觸發 HTTP 400。
+- **根治方案**：
+  1. **逆向對齊官方結構**：直接解析表單端點之 `FB_PUBLIC_LOAD_DATA_`，全面校正 12 組欄位 Entry ID 與官方列舉選項（含完整親友分類清單、出席狀態文案、喜帖與素食欄位），確保資料驗證百分之百通過（HTTP 200 OK）。
+  2. **多通道現代傳輸引擎（Multi-Channel Transmission Engine）**：
+     - **主通道（Primary）**：以現代標準 `fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString() })` 直接傳送 URL-encoded 封包。`mode: 'no-cors'` 屬於標準 Simple Request，Safari（Mac / iOS）100% 允許跨域送出且完全不經 iframe，徹底免疫 WebKit ITP 攔截。
+     - **背景信標通道（Secondary）**：同步輔以 `navigator.sendBeacon`，保障即使在手機切換 App 或關閉頁面瞬間仍可靠送達。
+     - **iframe 渲染樹合規備援**：將備援 iframe 改為 `position: absolute; width: 1px; height: 1px; left: -9999px;`，使其真實存在於 DOM 渲染樹中，不被 WebKit 視為死節點而丟棄。

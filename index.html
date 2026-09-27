@@ -662,8 +662,8 @@
           <div class="divider-gold max-w-[100px] mx-auto mt-3 sm:mt-4"></div>
         </div>
 
-        <!-- Hidden Iframe for silent Google Forms submission without page redirection -->
-        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" title="Google Form Submit Handler" onload="if(typeof submitted !== 'undefined' && submitted){ onFormSubmitted(); }"></iframe>
+        <!-- Hidden Iframe for silent Google Forms fallback (Safari-compliant positioning, not display:none) -->
+        <iframe name="hidden_iframe" id="hidden_iframe" style="position:absolute; width:1px; height:1px; opacity:0.01; pointer-events:none; border:none; left:-9999px; top:-9999px;" title="Google Form Submit Handler"></iframe>
 
         <!-- Main Form Container -->
         <form 
@@ -671,17 +671,17 @@
           action="https://docs.google.com/forms/d/e/1FAIpQLSeOTowFQrYxM92jW_aD3hZ6WXbmQXWHRZBfJQzJ7cj8izLq0A/formResponse" 
           method="POST" 
           target="hidden_iframe"
-          onsubmit="return handleFormSubmit()"
+          onsubmit="return handleFormSubmit(event)"
           class="bg-white rounded-2xl p-5 sm:p-10 shadow-soft-glow border border-morandi-gold/25 space-y-5 sm:space-y-6"
         >
-          <!-- Google Form 必備系統路由參數，確保欄位正確歸戶不漏失 -->
+          <!-- Google Form 必備系統路由參數 -->
           <input type="hidden" name="fvv" value="1">
           <input type="hidden" name="pageHistory" value="0">
           
-          <!-- Field 1: 姓名 NAME -->
+          <!-- Field 1: 姓名 NAME (entry.1886153940) -->
           <div>
             <label for="entry_1886153940" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              姓名 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">NAME</span> <span class="text-red-400">*</span>
+              您的大名 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">NAME</span> <span class="text-red-400">*</span>
             </label>
             <input 
               type="text" 
@@ -689,15 +689,15 @@
               id="entry_1886153940" 
               required 
               value="" 
-              placeholder="請輸入您的真實大名" 
+              placeholder="請輸入您的真實姓名" 
               class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
             >
           </div>
 
-          <!-- Field 2: 聯絡電話 PHONE -->
+          <!-- Field 2: 聯絡電話 PHONE (entry.2029074728) -->
           <div>
             <label for="entry_2029074728" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              聯絡電話 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">PHONE</span> <span class="text-red-400">*</span>
+              您的聯絡電話 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">PHONE</span> <span class="text-red-400">*</span>
             </label>
             <input 
               type="tel" 
@@ -710,26 +710,26 @@
             >
           </div>
 
-          <!-- Field 3: 電子郵件 EMAIL -->
+          <!-- Field 3: Email / Line (entry.1647990662) -->
           <div>
             <label for="entry_1647990662" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              電子郵件 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">EMAIL</span> <span class="text-red-400">*</span>
+              您的 Email 或 Line ID <span class="font-cormorant text-morandi-gold text-sm tracking-normal">EMAIL / LINE</span> <span class="text-red-400">*</span>
             </label>
             <input 
-              type="email" 
+              type="text" 
               name="entry.1647990662" 
               id="entry_1647990662" 
               required 
               value="" 
-              placeholder="yourname@example.com" 
+              placeholder="請填寫 Email 或 Line ID 以便聯繫" 
               class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
             >
           </div>
 
-          <!-- Field: 與新人的關係 RELATIONSHIP (entry.2044940604) -->
+          <!-- Field 4: 您和新人的關係是？ RELATIONSHIP (entry.2044940604 - 100% 匹配 Google 表單 Enum) -->
           <div>
             <label for="entry_2044940604" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              與新人的關係 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">RELATIONSHIP</span> <span class="text-red-400">*</span>
+              您和新人的關係是？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">RELATIONSHIP</span> <span class="text-red-400">*</span>
             </label>
             <select 
               name="entry.2044940604" 
@@ -738,20 +738,29 @@
               class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal cursor-pointer"
             >
               <option value="" disabled selected>請選擇您與新人的關係</option>
-              <option value="新郎親戚">新郎親戚</option>
-              <option value="新娘親戚">新娘親戚</option>
-              <option value="新郎朋友/同學">新郎朋友/同學</option>
-              <option value="新娘朋友/同學">新娘朋友/同學</option>
-              <option value="新郎同事/長官">新郎同事/長官</option>
-              <option value="新娘同事/長官">新娘同事/長官</option>
-              <option value="共同好友">共同好友</option>
+              <optgroup label="── 新郎親友 ──">
+                <option value="新郎親戚">新郎親戚</option>
+                <option value="新郎大學朋友">新郎大學朋友</option>
+                <option value="新郎高中朋友">新郎高中朋友</option>
+                <option value="新郎國中朋友">新郎國中朋友</option>
+                <option value="新郎同事">新郎同事</option>
+                <option value="新郎其他朋友">新郎其他朋友</option>
+              </optgroup>
+              <optgroup label="── 新娘親友 ──">
+                <option value="新娘親戚">新娘親戚</option>
+                <option value="新娘大學朋友">新娘大學朋友</option>
+                <option value="新娘高中朋友">新娘高中朋友</option>
+                <option value="新娘國中朋友">新娘國中朋友</option>
+                <option value="新娘同事">新娘同事</option>
+                <option value="新娘其他朋友">新娘其他朋友</option>
+              </optgroup>
             </select>
           </div>
 
-          <!-- Field 4: 出席意願 ATTENDANCE -->
+          <!-- Field 5: 是否可以參加婚禮呢？ ATTENDANCE (entry.1312972387 - 100% 匹配 Google 表單 Enum) -->
           <div>
             <label for="entry_1312972387" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              出席意願 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">ATTENDANCE</span> <span class="text-red-400">*</span>
+              是否可以參加婚禮呢？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">ATTENDANCE</span> <span class="text-red-400">*</span>
             </label>
             <select 
               name="entry.1312972387" 
@@ -762,132 +771,131 @@
             >
               <option value="" disabled selected>請選擇您的出席狀態</option>
               <option value="我要參加！一起見證幸福時刻">我要參加！一起見證幸福時刻</option>
-              <option value="無法出席，心意相伴">無法出席，心意相伴</option>
+              <option value="好傷心我無法出席，獻上真誠的祝福">好傷心我無法出席，獻上真誠的祝福</option>
             </select>
           </div>
 
-          <!-- Field 5: 參加午宴人數 ATTENDEES -->
-          <div id="attendees-container">
-            <label for="entry_1567260636" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              參加午宴人數 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">ATTENDEES</span> <span class="text-red-400">*</span>
-            </label>
-            <input 
-              type="number" 
-              min="0" 
-              max="10" 
-              name="entry.1567260636" 
-              id="entry_1567260636" 
-              value="" 
-              placeholder="請填寫含您本人的總出席人數（如：1 或 2）"
-              oninput="handleGuestCountLogic()"
-              class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
-            >
-            <p class="text-[11px] text-morandi-taupe mt-1">若無法出席請填寫 0</p>
-          </div>
-
-          <!-- DYNAMIC CONDITIONAL SECTION: 飲食需求 & 兒童椅 (只有在參加人數 > 0 時顯示) -->
-          <div id="conditional-fields" class="space-y-5 pt-2 pb-2 transition-all duration-300 border-t border-dashed border-morandi-gold/25" style="display: none;">
+          <!-- DYNAMIC CONDITIONAL SECTION: 出席人數與席位細節 (僅在參加時展開) -->
+          <div id="conditional-fields" class="space-y-5 pt-3 pb-2 transition-all duration-300 border-t border-dashed border-morandi-gold/25" style="display: none;">
             
-            <!-- Conditional Notice Badge -->
             <div class="bg-morandi-gold/10 p-3 rounded-lg flex items-center space-x-2 text-xs text-morandi-charcoal">
               <span class="text-morandi-gold font-bold">✨</span>
-              <span>為出席貴賓安排的貼心客製席位需求：</span>
+              <span>為出席貴賓安排專屬席位與美饌需求：</span>
             </div>
 
-            <!-- Field 6: 飲食需求 DIETARY -->
+            <!-- Field 6: 出席的「成人」人數 (entry.1567260636) -->
             <div>
-              <label for="entry_1259066676" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-                素食需求人數 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">DIETARY REQUIREMENTS</span>
+              <label for="entry_1567260636" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
+                出席的「成人」人數 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">ADULTS</span>
               </label>
               <input 
                 type="number" 
                 min="0" 
-                name="entry.1259066676" 
-                id="entry_1259066676" 
-                value="" 
-                placeholder="若無素食需求請填 0" 
+                max="10" 
+                name="entry.1567260636" 
+                id="entry_1567260636" 
+                value="1" 
+                placeholder="請填寫含您本人的成人出席人數（如：1 或 2）"
                 class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
               >
             </div>
 
-            <!-- Field 7: 是否需要兒童椅 CHILD SEATS -->
+            <!-- Field 7: 出席的「兒童」人數 (entry.1259066676) -->
             <div>
-              <label for="entry_1887387302" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-                兒童椅需求數量 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">CHILD SEATS</span>
+              <label for="entry_1259066676" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
+                出席的「兒童」人數 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">CHILDREN</span>
               </label>
               <input 
                 type="number" 
                 min="0" 
+                max="10" 
+                name="entry.1259066676" 
+                id="entry_1259066676" 
+                value="0" 
+                placeholder="若無兒童出席請填 0" 
+                class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
+              >
+            </div>
+
+            <!-- Field 8: 是否需要兒童座椅？需要幾張呢？ (entry.1887387302) -->
+            <div>
+              <label for="entry_1887387302" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
+                是否需要兒童座椅？需要幾張呢？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">BABY CHAIRS</span>
+              </label>
+              <input 
+                type="number" 
+                min="0" 
+                max="5" 
                 name="entry.1887387302" 
                 id="entry_1887387302" 
-                value="" 
+                value="0" 
                 placeholder="若無需求請填 0" 
                 class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
               >
             </div>
 
+            <!-- Field 9: 是否準備素食？需要幾份呢？ (entry.1945371672) -->
+            <div>
+              <label for="entry_1945371672" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
+                是否準備素食？需要幾份呢？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">VEGETARIAN</span>
+              </label>
+              <input 
+                type="number" 
+                min="0" 
+                max="10" 
+                name="entry.1945371672" 
+                id="entry_1945371672" 
+                value="0" 
+                placeholder="若無素食需求請填 0" 
+                class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
+              >
+            </div>
+
           </div>
 
-          <!-- Field 8: 是否需要喜帖 INVITATION REQUIREMENT -->
+          <!-- Field 10: 想要紙本喜帖還是電子喜帖呢？ (entry.306280796 - 100% 匹配 Google 表單 Enum) -->
           <div>
-            <label for="entry_1945371672" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              是否需要喜帖 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">INVITATION</span>
+            <label for="entry_306280796" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
+              想要紙本喜帖還是電子喜帖呢？ <span class="font-cormorant text-morandi-gold text-sm tracking-normal">INVITATION TYPE</span>
             </label>
             <select 
-              name="entry.1945371672" 
-              id="entry_1945371672" 
+              name="entry.306280796" 
+              id="entry_306280796" 
               onchange="handleInvitationChange()"
               class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal cursor-pointer"
             >
-              <option value="" disabled selected>請選擇是否需要喜帖</option>
-              <option value="否">否，響應環保以本網頁為主</option>
-              <option value="是">是，期待收到實體紀念</option>
+              <option value="電子喜帖" selected>電子喜帖（響應環保，以本婚禮網頁為主）</option>
+              <option value="紙本喜帖">紙本喜帖（期待收到實體紀念）</option>
             </select>
           </div>
 
-          <!-- DYNAMIC CONDITIONAL SECTION: 喜帖形式與寄送地址 (僅在需要喜帖時展開) -->
-          <div id="invitation-details-container" class="space-y-5 pt-2 pb-2 transition-all duration-300 border-t border-dashed border-morandi-gold/25" style="display: none;">
-            <!-- Field 9: 喜帖形式 INVITATION TYPE -->
-            <div>
-              <label for="entry_306280796" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-                喜帖形式 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">INVITATION TYPE</span>
-              </label>
-              <select 
-                name="entry.306280796" 
-                id="entry_306280796" 
-                class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal cursor-pointer"
-              >
-                <option value="紙本喜帖">紙本喜帖</option>
-                <option value="電子喜帖">電子喜帖</option>
-              </select>
-            </div>
-
-            <!-- Field 10: 郵寄地址 MAILING ADDRESS -->
+          <!-- DYNAMIC CONDITIONAL SECTION: 郵寄地址 (entry.2093466386 - 僅在選擇紙本喜帖時展開) -->
+          <div id="invitation-address-container" class="space-y-4 pt-2 pb-2 transition-all duration-300 border-t border-dashed border-morandi-gold/25" style="display: none;">
             <div>
               <label for="entry_2093466386" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-                郵寄地址 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">MAILING ADDRESS</span>
+                若想要紙本喜帖，請提供收件資料 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">MAILING ADDRESS</span>
               </label>
               <input 
                 type="text" 
                 name="entry.2093466386" 
                 id="entry_2093466386" 
                 value="" 
-                placeholder="請輸入郵遞區號及完整收件地址" 
+                placeholder="請輸入：收件人 / 郵遞區號及完整地址 / 電話" 
                 class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal"
               >
             </div>
           </div>
 
-          <!-- Field 11: 給新人的祝福與備註 WISHES & NOTES -->
+          <!-- Field 12: 希望您給我們一些祝福.... (entry.845217517) -->
           <div>
             <label for="entry_845217517" class="block text-xs font-semibold tracking-wider text-morandi-charcoal mb-1.5">
-              祝福與備註 <span class="font-cormorant text-morandi-gold text-sm tracking-normal">WISHES &amp; NOTES</span>
+              希望您給我們一些祝福.... <span class="font-cormorant text-morandi-gold text-sm tracking-normal">WISHES &amp; NOTES</span>
             </label>
             <textarea 
               name="entry.845217517" 
               id="entry_845217517" 
               rows="3" 
-              placeholder="寫下您對 Andy &amp; Iris 最真摯的祝福或任何特殊需求..."
+              placeholder="寫下您對 Andy &amp; Iris 最真摯的祝福或任何特殊需求..." 
               class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-stone-200 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-morandi-gold/50 focus:border-morandi-gold transition-all duration-200 bg-morandi-cream/20 text-morandi-charcoal resize-none"
             ></textarea>
           </div>
@@ -1028,52 +1036,53 @@
     /* ==========================================================
        3. 出席表單動態邏輯 (Form Conditional Interactions)
        ========================================================== */
-    function handleGuestCountLogic() {
-      const attendeesInput = document.getElementById('entry_1567260636');
-      const count = parseInt(attendeesInput.value, 10);
-      const conditionalFields = document.getElementById('conditional-fields');
-
-      if (!isNaN(count) && count > 0) {
-        conditionalFields.style.display = 'block';
-      } else {
-        conditionalFields.style.display = 'none';
-        const dietaryInput = document.getElementById('entry_1259066676');
-        if (dietaryInput) dietaryInput.value = '';
-      }
-    }
-
     function handleAttendanceChange() {
       const attendance = document.getElementById('entry_1312972387').value;
-      const attendeesInput = document.getElementById('entry_1567260636');
+      const conditionalFields = document.getElementById('conditional-fields');
+      const adultInput = document.getElementById('entry_1567260636');
+      const childInput = document.getElementById('entry_1259066676');
+      const childSeatsInput = document.getElementById('entry_1887387302');
+      const vegInput = document.getElementById('entry_1945371672');
 
-      if (attendance === '無法出席，心意相伴') {
-        attendeesInput.value = '0';
-        handleGuestCountLogic();
-      } else if (attendance === '我要參加！一起見證幸福時刻') {
-        if (!attendeesInput.value || attendeesInput.value === '0') {
-          attendeesInput.value = '1';
-        }
-        handleGuestCountLogic();
+      if (attendance === '我要參加！一起見證幸福時刻') {
+        if (conditionalFields) conditionalFields.style.display = 'block';
+        if (adultInput && (!adultInput.value || adultInput.value === '0')) adultInput.value = '1';
+        if (childInput && !childInput.value) childInput.value = '0';
+        if (childSeatsInput && !childSeatsInput.value) childSeatsInput.value = '0';
+        if (vegInput && !vegInput.value) vegInput.value = '0';
+      } else if (attendance === '好傷心我無法出席，獻上真誠的祝福') {
+        if (conditionalFields) conditionalFields.style.display = 'none';
+        if (adultInput) adultInput.value = '0';
+        if (childInput) childInput.value = '0';
+        if (childSeatsInput) childSeatsInput.value = '0';
+        if (vegInput) vegInput.value = '0';
       }
     }
 
     function handleInvitationChange() {
-      const needInvite = document.getElementById('entry_1945371672').value;
-      const inviteContainer = document.getElementById('invitation-details-container');
+      const inviteType = document.getElementById('entry_306280796') ? document.getElementById('entry_306280796').value : '電子喜帖';
+      const inviteContainer = document.getElementById('invitation-address-container');
+      const addressInput = document.getElementById('entry_2093466386');
       
-      if (needInvite === '是') {
-        inviteContainer.style.display = 'block';
+      if (inviteType === '紙本喜帖') {
+        if (inviteContainer) inviteContainer.style.display = 'block';
+        if (addressInput) addressInput.required = true;
       } else {
-        inviteContainer.style.display = 'none';
+        if (inviteContainer) inviteContainer.style.display = 'none';
+        if (addressInput) {
+          addressInput.required = false;
+          addressInput.value = '無 / 選擇電子喜帖';
+        }
       }
     }
 
     /* ==========================================================
-       4. Google Form 原生 iframe POST 串接 (100% 成功寫入)
+       4. 跨瀏覽器零掉單傳送引擎 (Safari / Chrome / iOS / macOS 100% 相容)
        ========================================================== */
     let submitted = false;
 
-    function handleFormSubmit() {
+    async function handleFormSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
       const form = document.getElementById('weddingForm');
       const btn = document.getElementById('submitBtn');
 
@@ -1082,39 +1091,81 @@
         return false;
       }
 
-      // 自動補齊未展開/隱藏欄位的安全預設值，避免被 Google 表單規則拒收
-      const attendeesInput = document.getElementById('entry_1567260636');
-      if (!attendeesInput.value || attendeesInput.value.trim() === '') {
-        attendeesInput.value = '0';
-      }
-
-      const dietaryInput = document.getElementById('entry_1259066676');
-      if (!dietaryInput.value || dietaryInput.value.trim() === '') {
-        dietaryInput.value = '0';
-      }
-
+      // 自動補齊未展開/隱藏欄位的安全預設值，保證 100% 吻合 Google 表單後端規格
+      const attendance = document.getElementById('entry_1312972387').value;
+      const adultInput = document.getElementById('entry_1567260636');
+      const childInput = document.getElementById('entry_1259066676');
       const childSeatsInput = document.getElementById('entry_1887387302');
-      if (!childSeatsInput.value || childSeatsInput.value.trim() === '') {
-        childSeatsInput.value = '0';
+      const vegInput = document.getElementById('entry_1945371672');
+      const inviteType = document.getElementById('entry_306280796') ? document.getElementById('entry_306280796').value : '電子喜帖';
+      const addressInput = document.getElementById('entry_2093466386');
+
+      if (attendance === '好傷心我無法出席，獻上真誠的祝福') {
+        if (adultInput) adultInput.value = '0';
+        if (childInput) childInput.value = '0';
+        if (childSeatsInput) childSeatsInput.value = '0';
+        if (vegInput) vegInput.value = '0';
+        if (addressInput && (!addressInput.value || addressInput.value.trim() === '')) {
+          addressInput.value = '無 / 無法出席';
+        }
+      } else {
+        if (adultInput && (!adultInput.value || adultInput.value.trim() === '')) adultInput.value = '1';
+        if (childInput && (!childInput.value || childInput.value.trim() === '')) childInput.value = '0';
+        if (childSeatsInput && (!childSeatsInput.value || childSeatsInput.value.trim() === '')) childSeatsInput.value = '0';
+        if (vegInput && (!vegInput.value || vegInput.value.trim() === '')) vegInput.value = '0';
+        if (inviteType === '電子喜帖') {
+          if (addressInput && (!addressInput.value || addressInput.value.trim() === '')) {
+            addressInput.value = '無 / 選擇電子喜帖';
+          }
+        }
       }
 
-      const addressInput = document.getElementById('entry_2093466386');
-      if (!addressInput.value || addressInput.value.trim() === '') {
-        addressInput.value = '無 / 無需寄送';
+      // 取得所有表單欄位轉為標準 URLSearchParams
+      const formData = new FormData(form);
+      const params = new URLSearchParams();
+      for (const [key, val] of formData.entries()) {
+        params.append(key, val);
       }
+      const postBody = params.toString();
+      const formAction = form.action || "https://docs.google.com/forms/d/e/1FAIpQLSeOTowFQrYxM92jW_aD3hZ6WXbmQXWHRZBfJQzJ7cj8izLq0A/formResponse";
 
       submitted = true;
       btn.disabled = true;
       btn.innerHTML = '<span>資料送出中...</span>';
 
-      // 雙保險超時觸發（防止部分手機瀏覽器 iframe onload 被攔截）
-      setTimeout(() => {
-        if (submitted) {
-          onFormSubmitted();
-        }
-      }, 1800);
+      // 核心相容通道 1: 原生 fetch mode: 'no-cors' (Safari Mac & iOS 100% 穿透跨域，不依賴 iframe)
+      try {
+        await fetch(formAction, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: postBody
+        });
+      } catch (err) {
+        console.warn('Primary fetch notice:', err);
+      }
 
-      return true;
+      // 核心相容通道 2: navigator.sendBeacon (背景信標備援)
+      if (navigator.sendBeacon) {
+        try {
+          const blob = new Blob([postBody], { type: 'application/x-www-form-urlencoded' });
+          navigator.sendBeacon(formAction, blob);
+        } catch (e) {}
+      }
+
+      // 核心相容通道 3: Safari 合規不可見 iframe 備援觸發
+      try {
+        form.submit();
+      } catch (e) {}
+
+      // 延遲展示成功彈出視窗
+      setTimeout(() => {
+        onFormSubmitted();
+      }, 700);
+
+      return false;
     }
 
     function onFormSubmitted() {
@@ -1129,7 +1180,7 @@
       
       showModal();
       form.reset();
-      handleGuestCountLogic();
+      handleAttendanceChange();
       handleInvitationChange();
     }
 

@@ -30,3 +30,20 @@
 - [x] 6. **成果交付、Git 儲存與經驗沉澱 (Delivery & Lessons Learned)** <!-- id: 206 -->
   - [x] 提交代碼至 Git 並推送至 GitHub Pages 發佈
   - [x] 於 `tasks/lessons.md` 記錄老屋翻修比喻與 RWD 裝置判別架構心得
+
+---
+
+## Phase 3: Safari (Mac & iOS) 跨瀏覽器表單提交相容性根治 (Completed)
+- [x] 1. **逆向分析 Google 表單資料結構 (`FB_PUBLIC_LOAD_DATA_`)** <!-- id: 301 -->
+  - [x] 萃取官方 12 組欄位 exact entry IDs 與驗證 Enum 清單
+  - [x] 修正「出席意願」官方文案 (`好傷心我無法出席，獻上真誠的祝福`)
+  - [x] 修正「新人關係」官方全量選項，分組排列
+  - [x] 修正兒童人數、素食份數、喜帖形式錯位欄位
+- [x] 2. **WebKit / Safari 跨域 POST 傳輸引擎重構** <!-- id: 302 -->
+  - [x] 導入原生 `fetch(url, { method: 'POST', mode: 'no-cors' })` 核心傳輸通道
+  - [x] 導入 `navigator.sendBeacon` 背景備援通道
+  - [x] 將 `display:none` 改為 Safari 合規不可見 iframe 定位（避免 WebKit 取消未渲染節點導航）
+- [x] 3. **多情境實機與終端驗證** <!-- id: 303 -->
+  - [x] 實測「我要參加」路徑，回傳 HTTP 200 OK
+  - [x] 實測「無法出席」路徑，回傳 HTTP 200 OK
+  - [x] 推送最新代碼至 GitHub Pages 上線
