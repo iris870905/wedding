@@ -17,3 +17,10 @@
 - [x] 4. **總結與知識沉澱 (Summary & Lessons Learned)** <!-- id: 14 -->
   - [x] 產出繁體中文技術交接文件與說明 <!-- id: 15 -->
   - [x] 記錄經驗至 `tasks/lessons.md` <!-- id: 16 -->
+- [x] 5. **GitHub 環境構建與 Pages 自動部署 (GitHub Env & Pages Deployment)** <!-- id: 17 -->
+  - [x] 安裝獨立便攜式 Git (v2.55.0) 與動態函式庫 (pcre2, gettext) <!-- id: 18 -->
+  - [x] 安裝官方 GitHub CLI (gh v2.101.0) 並設定環境變數 PATH <!-- id: 19 -->
+  - [x] 完成 OAuth Device Web 授權登入（帳號：iris870905） <!-- id: 20 -->
+  - [x] 初始化本地 Git 儲存庫、配置 .gitignore 與建立初始 Commit <!-- id: 21 -->
+  - [x] 於 GitHub 建立公開儲存庫 `iris870905/wedding` 並完成推送 <!-- id: 22 -->
+  - [x] 啟用 GitHub Pages (main 分支根目錄)，驗證上線為 HTTP 200 <!-- id: 23 -->

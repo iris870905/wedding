@@ -15,3 +15,10 @@
 ## 3. RWD 響應式雙頁書本排版 (Responsive Double-Spread Layout)
 - **問題現象**：原始樣式在手機小螢幕使用 `w-full sm:w-1/2`，導致手機上右頁覆蓋左頁，使用者無法閱讀奇數頁照片。
 - **根治方案**：左右兩頁統一設定 `w-1/2` 搭配 `object-contain`，在所有裝置維持精品精裝書（Book-spread）對開質感，並常態顯示書脊中線陰影 (`book-spine-shadow`)，完美呈現 10 張精選照片的雙頁視覺節奏。
+
+## 4. 無 Sudo 權限下的開發工具鏈自力構建 (Zero-Sudo Toolchain Provisioning)
+- **問題現象**：macOS 預設 `/usr/bin/git` 為 Xcode Command Line Tools 佔位符，尚未安裝時會彈出強制 GUI 對話框；而 `softwareupdate` 背景安裝則因缺乏 root 權限掛起。
+- **根治方案**：直接透過 Homebrew 官方 OCI 鏡像倉儲 (`ghcr.io`) 萃取獨立原生 ARM64 二進制與動態庫（Git v2.55.0、PCRE2、Gettext），並搭配封裝 Shell Wrapper 配置 `DYLD_LIBRARY_PATH` 放置於 `~/.local/bin`，同時安裝官方 GitHub CLI (`gh` v2.101.0)，達成完全無需 root / sudo 且不干擾系統底層的便攜式開發工具鏈。
+
+## 5. GitHub Pages 部署自動化與零破損相對路徑
+- **經驗總結**：所有靜態資源一律使用相對目錄（`photos/webX.jpg`），無論是本機 WEBrick 預覽伺服器、專案子路徑 (`https://<user>.github.io/wedding/`) 或是頂級主網域，都能 100% 免疫 404 破圖問題。透過 `gh repo create` 與 `gh api /repos/.../pages`，可實現一鍵代碼推送、自動開立 Pages 服務與即時發佈。
