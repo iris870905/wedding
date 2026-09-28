@@ -8,7 +8,8 @@
 
 | 版本 (Version) | 發布日期 (Date) | Git Commit | 修改主軸 (Theme) | 核心解決問題與影響範圍 |
 | :--- | :--- | :--- | :--- | :--- |
-| **v1.10.0** | 2026-09-28 | `b39d963` | 首頁日期膠囊文字 1.5 倍放大與加粗 | 將 `2027 . 03 . 06 • TAIPEI` 字級放大 1.5 倍並設為 semibold 加粗，字體維持不變 |
+| **v1.11.0** | 2026-09-28 | `40a1944` | 全站內文說明小字 1.5 倍等比放大 | 全站所有區塊（含首頁邀請、倒數、攜手啟程、相本導言、婚禮詳情、交通指引、回函表單等）內文小字等比放大 1.5 倍 |
+| **v1.10.0** | 2026-09-28 | `4400ea0` | 首頁日期膠囊文字 1.5 倍放大與加粗 | 將 `2027 . 03 . 06 • TAIPEI` 字級放大 1.5 倍並設為 semibold 加粗，字體維持不變 |
 | **v1.9.0** | 2026-09-28 | `8452e66` | 首頁封面更換為 `封面.png` | 更換 Hero 封面圖源為 `photos/封面.png`，並部署 `photos/cover.png` 容錯備援 |
 | **v1.8.0** | 2026-09-28 | `6db5800` | 首頁 Hero 文字改為深咖啡色 | 將 `Andy & Iris`、邀請詩句與日期膠囊文字改為深咖啡色（`#4a3427`），字體與大小維持不變 |
 | **v1.7.0** | 2026-09-28 | `404b465` | 首頁封面更換為本地精選圖 | 將 Hero 封面更換為 `photos/we.png`，標準化檔名確保 Linux / GitHub Pages 相容性 |
@@ -24,6 +25,34 @@
 ---
 
 ## 📖 詳細版本變更歷程 (Detailed Changelog)
+
+### [v1.11.0] — 2026-09-28
+#### 🎯 全站內文說明小字 1.5 倍等比放大 (Site-Wide Body Typography Scaling)
+- **修改主軸 (Theme)**：
+  - 依照使用者確認之範圍，將全站各功能區塊的說明小字、導言、表格標籤及落款資訊進行 1.5 倍等比放大，全面提升在各型手機與高解析度螢幕上的閱讀舒適度與字體清晰感。
+- **實作改動 (Key Changes)**：
+  1. **首頁邀請說明 (Hero Invitation)**：
+     - 將副標邀請詩文由 `text-xs sm:text-base`（12px / 16px）調升至 `text-lg sm:text-2xl`（18px / 24px），視覺沉浸感大幅強化。
+  2. **幸福倒數 (Countdown)**：
+     - 倒數日期說明文字調升為 `text-base sm:text-lg`；天/時/分/秒單位標籤由 `text-[9px] sm:text-xs` 等比放大至 `text-xs sm:text-sm font-medium`。
+  3. **攜手啟程 (About Us - Our Next Chapter)**：
+     - 四行故事文案詩詞由 `text-sm sm:text-base` 升級為 `text-lg sm:text-2xl leading-relaxed sm:leading-loose`；新人中文簽名落款調升至 `text-sm sm:text-base`。
+  4. **婚紗相本 (Photo Gallery & Book)**：
+     - 翻頁提示導言與 Chapter 篇章詩意描述由 `text-xs sm:text-sm` 升級至 `text-base sm:text-lg`；翻頁按鈕與張數單位同步放大為 `text-sm sm:text-base`。
+  5. **婚禮詳情 (Wedding Details)**：
+     - 流程小卡（餐前酒會、準時開席）標題升為 `text-sm sm:text-lg`，說明字升為 `text-xs sm:text-sm`；宴會地址、樓層、導航按鈕及 Dress Code 穿著建議與色卡文字均全面調升 1.5 倍。
+  6. **交通指引 (Transportation Accordion)**：
+     - 展開式手風琴類別標題升為 `text-base sm:text-lg`；捷運、自駕停車、公車計程車面板內文說明升為 `text-base sm:text-lg leading-relaxed`。
+  7. **出席回函與彈窗 (Attendance Form & Modal)**：
+     - 表單 12 組欄位標籤 Label 升為 `text-sm sm:text-base font-semibold`，英文次標題升為 `text-base sm:text-lg`；席位提示框、送出附註與成功彈窗內文同步放大 1.5 倍。
+  8. **頁尾資訊 (Footer)**：
+     - 婚期地點與版權宣告文字等比調升為 `text-sm sm:text-base` 與 `text-xs sm:text-sm`。
+  9. **設計約束嚴格遵循**：
+     - Cormorant Garamond 與 Noto Serif TC 經典雙襯線字體 100% 保持；深咖啡色（`#4a3427`）設定 100% 保持；手機窄螢幕（360px ~ 430px）均通過無文字截斷與溢出之版型檢驗。
+- **影響檔案**：
+  - `index.html`（全站 8 大區塊內文字級全面重構）
+  - `tasks/todo.md`（追加 Phase 12 任務紀錄）
+  - `history.md`（收錄 v1.11.0 版本歷程）
 
 ### [v1.10.0] — 2026-09-28
 #### 🎯 首頁日期膠囊文字 1.5 倍放大與加粗 (Hero Date Typography Scaling)

@@ -118,11 +118,16 @@
 - [x] 3. **膠囊容器比例微調**：微幅調整外距與內距（`px-6 sm:px-8 py-2 sm:py-2.5`），使大字號與毛玻璃外框達到黃金視覺平衡 <!-- id: 1103 -->
 - [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 1104 -->
 
+---
 
-
-
-
-
-
-
-
+## Phase 12: 全站內文說明小字 1.5 倍等比放大 (Site-Wide Body Typography Scaling) (Completed)
+- [x] 1. **全站文字範圍釐清**：經確認包含首頁 Hero 邀請說明、幸福倒數單位、攜手啟程感言與落款、婚紗相本說明與篇章描述、婚禮詳情卡片與地址穿著、交通指引手風琴內容、出席回函欄位標籤與提示文字、頁尾資訊與成功彈窗 <!-- id: 1201 -->
+- [x] 2. **等比級數縮放 (1.5x Scaling Matrix)**：
+  - 首頁邀請說明：`text-xs sm:text-base` (12/16px) -> `text-lg sm:text-2xl` (18/24px)
+  - 倒數單位與說明：說明升為 `text-base sm:text-lg`，單位升為 `text-xs sm:text-sm`
+  - 攜手啟程：故事內文由 `text-sm sm:text-base` 升為 `text-lg sm:text-2xl`，落款升為 `text-sm sm:text-base`
+  - 婚紗相本：篇章導言由 `text-xs sm:text-sm` 升為 `text-base sm:text-lg`，翻頁與單位標籤等比放大
+  - 婚禮詳情與交通：卡片內文、時間表說明、宴會地址、穿著建議與交通路線均放大 1.5 倍
+  - 出席回函與彈窗：表單欄位 Label 由 `text-xs` 放大為 `text-sm sm:text-base`，提示字與彈窗說明同步放大
+- [x] 3. **保留字型與設計美感**：嚴格保留原有字體（Cormorant Garamond、Noto Serif TC）與深咖啡色（#4a3427）設定，確保大字在手機窄螢幕上不溢出折行 <!-- id: 1202 -->
+- [x] 4. **服務端驗證與版本發佈**：本機伺服器驗證無虞，同步更新 `history.md` (v1.11.0) 並推送至 GitHub Pages <!-- id: 1203 -->
