@@ -102,6 +102,15 @@
 - [x] 3. **對比度與質感調校**：日期膠囊調整為半透明深咖啡邊框與磨砂底色，消除舊有白色文字在淺色背景的辨識度問題 <!-- id: 903 -->
 - [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 904 -->
 
+---
+
+## Phase 10: 首頁封面再次更換為 `封面.png` (Hero Cover Image Re-upload) (Completed)
+- [x] 1. **檔案收納與多重備援**：納管新人最新上傳之 `photos/封面.png`，並同步建立 `photos/cover.png` 備援以防特定瀏覽器非 ASCII URL 編碼差異 <!-- id: 1001 -->
+- [x] 2. **更新 Hero 封面圖源**：將 `index.html` 圖源設為 `photos/封面.png`，並配置 `photos/cover.png` 容錯路徑 <!-- id: 1002 -->
+- [x] 3. **服務端驗證**：本機 HTTP 伺服器驗證中文路徑與 URL 編碼路徑皆正常回傳 HTTP 200 OK <!-- id: 1003 -->
+- [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 1004 -->
+
+
 
 
 

@@ -8,6 +8,7 @@
 
 | 版本 (Version) | 發布日期 (Date) | Git Commit | 修改主軸 (Theme) | 核心解決問題與影響範圍 |
 | :--- | :--- | :--- | :--- | :--- |
+| **v1.9.0** | 2026-09-28 | 待提交 | 首頁封面更換為 `封面.png` | 更換 Hero 封面圖源為 `photos/封面.png`，並部署 `photos/cover.png` 容錯備援 |
 | **v1.8.0** | 2026-09-28 | `6db5800` | 首頁 Hero 文字改為深咖啡色 | 將 `Andy & Iris`、邀請詩句與日期膠囊文字改為深咖啡色（`#4a3427`），字體與大小維持不變 |
 | **v1.7.0** | 2026-09-28 | `404b465` | 首頁封面更換為本地精選圖 | 將 Hero 封面更換為 `photos/we.png`，標準化檔名確保 Linux / GitHub Pages 相容性 |
 | **v1.6.0** | 2026-09-28 | `b5d497d` | 喜帖形式預選值移除與提示優化 | 移除「想要紙本喜帖還是電子喜帖呢？」默認預選，改為「請選擇您想要的喜帖」佔位提示並強化驗證 |
@@ -22,6 +23,23 @@
 ---
 
 ## 📖 詳細版本變更歷程 (Detailed Changelog)
+
+### [v1.9.0] — 2026-09-28
+#### 🎯 首頁封面更換為 `封面.png` (Hero Cover Image Re-upload)
+- **修改主軸 (Theme)**：
+  - 將首頁 Hero 封面背景圖更換為新人最新放置於 `photos/` 目錄之 `封面.png`。
+- **實作改動 (Key Changes)**：
+  1. **圖源切換與雙軌備援**：
+     - 將 `index.html` 中的 Hero 封面圖片路徑更新為 `photos/封面.png`。
+     - 同時於 `photos/` 建立同質備援檔案 `photos/cover.png`，並於 `img` 標籤配置 `onerror="this.src='photos/cover.png'"`，杜絕少數舊型瀏覽器或社群爬蟲因非 ASCII 路徑編碼導致之破圖問題。
+  2. **版面維持**：
+     - 保留上一版本調校之高雅深咖啡色文字系列（`#4a3427`），與最新封面之粉杏莫蘭迪背景維持卓越對比度與質感。
+- **影響檔案**：
+  - `index.html`（更新封面圖片 src 與 onerror）
+  - `photos/封面.png`（新封面圖片檔案）
+  - `photos/cover.png`（備援圖片檔案）
+  - `tasks/todo.md`（追加 Phase 10 任務記錄）
+  - `history.md`（收錄 v1.9.0 版本修訂）
 
 ### [v1.8.0] — 2026-09-28
 #### 🎯 首頁 Hero 文字色彩調整為深咖啡色 (Hero Typography Color Update)
