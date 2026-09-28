@@ -110,6 +110,15 @@
 - [x] 3. **服務端驗證**：本機 HTTP 伺服器驗證中文路徑與 URL 編碼路徑皆正常回傳 HTTP 200 OK <!-- id: 1003 -->
 - [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 1004 -->
 
+---
+
+## Phase 11: 首頁日期膠囊文字 1.5 倍放大與加粗 (Hero Date Typography Scaling) (Completed)
+- [x] 1. **文字放大 1.5 倍**：將 `2027 . 03 . 06 • TAIPEI` 字級由 12/14px 等比放大至 18/20px（`text-lg sm:text-xl`） <!-- id: 1101 -->
+- [x] 2. **字重加粗 1.5 倍**：將字重由 Regular (400) 調升為 Semibold (600)，字體嚴格保留 Cormorant Garamond 不變 <!-- id: 1102 -->
+- [x] 3. **膠囊容器比例微調**：微幅調整外距與內距（`px-6 sm:px-8 py-2 sm:py-2.5`），使大字號與毛玻璃外框達到黃金視覺平衡 <!-- id: 1103 -->
+- [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 1104 -->
+
+
 
 
 
