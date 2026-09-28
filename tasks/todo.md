@@ -86,6 +86,15 @@
 - [x] 3. **連動地址邏輯強化**：`handleInvitationChange` 在選中紙本喜帖時自動清空歷史佔位文字，便於賓客直接輸入收件地址 <!-- id: 703 -->
 - [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 704 -->
 
+---
+
+## Phase 8: 首頁封面圖片更新為本地精選照 (Hero Cover Image Update) (Completed)
+- [x] 1. **檔案收納與大小寫相容**：將 `photos/` 目錄之封面圖片標準化為 `photos/we.png`，確保 Linux / GitHub Pages 跨平台 100% 讀取無誤 <!-- id: 801 -->
+- [x] 2. **替換 Hero 封面圖源**：將原遠端圖片連結改為本地相對路徑 `photos/we.png`，保留漸變遮罩與立體文字陰影 <!-- id: 802 -->
+- [x] 3. **多裝置視覺與載入驗證**：透過本機 HTTP 伺服器驗證圖片尺寸（2658 x 984）與色彩漸層渲染 <!-- id: 803 -->
+- [x] 4. **同步版本紀錄**：更新 `history.md` 並推送至 GitHub Pages <!-- id: 804 -->
+
+
 
 
 
